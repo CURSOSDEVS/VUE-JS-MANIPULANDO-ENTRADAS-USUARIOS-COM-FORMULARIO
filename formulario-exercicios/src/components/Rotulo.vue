@@ -2,7 +2,7 @@
     <div class="rotulo">
         <label>{{ nome }}:</label>
         <div class="elemento">
-            <slot></slot>
+            <slot ></slot>
         </div>
     </div>
 </template>
@@ -32,13 +32,13 @@ export default {
         flex: 1;
         font-size: 1.4rem;
         outline: none;
-        border: 1px solid #DDD;
+        border: 1px solid #ddd;
         border-radius: 5px;
         padding: 5px 10px;
     }
 
 
     input:focus {
-        border: 1px solid #BBB;
+        border: 1px solid #ccc;
     }
 </style>

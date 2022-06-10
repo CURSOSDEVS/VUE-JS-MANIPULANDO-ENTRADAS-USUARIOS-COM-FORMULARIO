@@ -2,65 +2,73 @@
 	<div id="app">
 		<h1>Registrar Reclamação</h1>
 		<div class="conteudo">
-			<form class="painel">
+			<form class="painel" v-if="!enviado">
 				<div class="cabecalho">Formulário</div>
 				<Rotulo nome="E-mail">
-					<input type="text">
+					<input v-model.lazy.trim="user.mail" type="text">
 				</Rotulo>
 				<Rotulo nome="Senha">
-					<input type="password">
+					<input type="password" v-model="user.password">
 				</Rotulo>
 				<Rotulo nome="Idade">
-					<input type="number">
+					<input type="number" v-model.number="user.age">
 				</Rotulo>
 				<Rotulo nome="Mensagem">
-					<textarea name="" cols="30" rows="5"></textarea>
+					<textarea name="" cols="30" rows="5" v-model="mensagem"></textarea>
 				</Rotulo>
 				<Rotulo nome="Características do Problema">
-					<span class="mr-4"><input type="checkbox" value="reproduzivel"> Reproduzível</span>
-					<span><input type="checkbox" value="intermitente"> Intermitente</span>
+					<span class="mr-4"><input type="checkbox" value="reproduzivel" v-model="caracteristicas"> Reproduzível</span>
+					<span><input type="checkbox" value="intermitente" v-model="caracteristicas"> Intermitente</span>
 				</Rotulo>
 				<Rotulo nome="Qual produto?">
-					<span class="mr-4"><input type="radio"> Web</span>
-					<span class="mr-4"><input type="radio"> Mobile</span>
-					<span><input type="radio"> Outro</span>
+					<span class="mr-4"><input type="radio" value="web" v-model="produto"> Web</span>
+					<span class="mr-4"><input type="radio" value="mobile" v-model="produto"> Mobile</span>
+					<span><input type="radio" value="outro" v-model="produto"> Outro</span>
 				</Rotulo>
 				<Rotulo nome="Prioridade">
-					<select name="" id="">
-						<option></option>
+					<select name="" id="" v-model="prioridade">
+						<option v-for="prioridade in prioridades" 
+							:key="prioridade.codigo"
+							:value="prioridade.codigo"
+							:selected="prioridade.codigo === 3"
+								>{{ prioridade.nome }}</option>
 					</select>
 				</Rotulo>
 				<Rotulo nome="Primeira Reclamação?">
-					<Escolha />
+					<Escolha v-model="escolha" />
 				</Rotulo>
 				<hr>
-				<button>Enviar</button>
+				<button @click.prevent="enviar">Enviar</button>
 			</form>
-			<div class="painel">
+			<div class="painel" v-else>
 				<div class="cabecalho">Resultado</div>
 				<Rotulo nome="E-mail">
-					<span>???</span>
+					<span>{{user.mail}}</span>
 				</Rotulo>
 				<Rotulo nome="Senha">
-					<span>???</span>
+					<span>{{user.password}}</span>
 				</Rotulo>
 				<Rotulo nome="Idade">
-					<span>???</span>
+					<span>{{user.age}}</span>
 				</Rotulo>
 				<Rotulo nome="Mensagem">
-					<span>???</span>
+					<span style="white-space: pre;">{{ mensagem }}</span>
 				</Rotulo>
 				<Rotulo nome="Marque as Opções">
-					<span>???</span>
+					<span>{{ produto }}</span>
 				</Rotulo>
 				<Rotulo nome="Qual produto?">
-					<span>???</span>
+					<span>
+						<ul>
+							<li v-for="c in caracteristicas" :key="">{{ c }}</li>
+						</ul>
+					</span>
 				</Rotulo>
 				<Rotulo nome="Prioridade">
-					<span>???</span>
+					<span>{{ prioridade }}</span>
 				</Rotulo>
 				<Rotulo nome="Primeira Reclamação?">
-					<span>???</span>
+					<span>{{ escolha }}</span>
 				</Rotulo>
 			</div>
 		</div>
@@ -73,7 +81,35 @@ import Escolha from './components/Escolha.vue'
 
 export default {
 	name: 'app',
-	components: { Rotulo, Escolha }
+	components: { Rotulo, Escolha },
+	data() {
+		return {
+			//método uitlizando somente a interpolação simples
+			// email: ''
+			//utilizando um objeto passando todos os atributos necessáros para o registro dos dados
+			user:{
+				mail:'',
+				password:'',
+				age:''
+			},
+			mensagem: '',
+			caracteristicas:[],
+			produto: 'web',
+			prioridade: 1,
+			prioridades: [
+				{'codigo':1, nome:'Baixa'},
+				{'codigo':2, nome:'Moderada'},
+				{'codigo':3, nome:'Alta'}
+			],
+			escolha: true,
+			enviado: false
+		}
+	},
+	methods: {
+			enviar(){
+				this.enviado = true;
+			}
+		},
 }
 </script>
 
